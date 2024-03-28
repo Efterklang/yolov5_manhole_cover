@@ -37,7 +37,7 @@ class VarifocalLoss(nn.Module):
 
 class FocalLoss(nn.Module):
     """Wraps focal loss around existing loss_fcn(), i.e. criteria = FocalLoss(nn.BCEWithLogitsLoss(), gamma=1.5)."""
-
+    # yolotodo focalloss 
     def __init__(self):
         """Initializer for FocalLoss class with no parameters."""
         super().__init__()

@@ -40,7 +40,9 @@ def list_to_string(input_list) -> str:
     return count + "\n" + value_str
 
 
-def predictImg(image_path, model_path="./weight/best.pt", device_arg="0", conf_arg=0.35):
+def predictImg(
+    image_path, model_path="./weight/best.pt", device_arg="0", conf_arg=0.35
+):
 
     # 加载图片
     model = YOLO(model_path)

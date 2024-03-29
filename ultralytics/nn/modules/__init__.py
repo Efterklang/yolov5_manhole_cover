@@ -36,6 +36,7 @@ from .block import (
     Proto,
     RepC3,
     ResNetLayer,
+    SELayer, conv_bn_hswish, MobileNetV3_InvertedResidual
 )
 from .conv import (
     CBAM,

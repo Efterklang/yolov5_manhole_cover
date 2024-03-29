@@ -7,6 +7,7 @@ import torch.nn.functional as F
 
 from .conv import Conv, DWConv, GhostConv, LightConv, RepConv
 from .transformer import TransformerBlock
+from .backbone.MobileNetV3 import SELayer, conv_bn_hswish, MobileNetV3_InvertedResidual
 
 __all__ = (
     "DFL",
@@ -27,6 +28,9 @@ __all__ = (
     "Proto",
     "RepC3",
     "ResNetLayer",
+    "SELayer",
+    "conv_bn_hswish",
+    "MobileNetV3_InvertedResidual"
 )
 
 

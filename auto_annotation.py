@@ -2,6 +2,7 @@ from ultralytics import YOLO
 import os
 import logging
 
+
 def auto_annotation(
     image_path, output_path, model_path="./weight/best.pt", confidence=0.75
 ):
@@ -24,7 +25,9 @@ def auto_annotation(
     )
 
 
-def traverse_dir(img_dir_path, output_path,model_path="./weight/best.pt", confidence=0.75):
+def traverse_dir(
+    img_dir_path, output_path, model_path="./weight/best.pt", confidence=0.75
+):
     os.makedirs(output_path, exist_ok=True)
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     logger = logging.getLogger(__name__)

@@ -3,7 +3,6 @@
 import contextlib
 from copy import deepcopy
 from pathlib import Path
-
 import torch
 import torch.nn as nn
 
@@ -39,7 +38,7 @@ from ultralytics.nn.modules import (
     RepConv,
     ResNetLayer,
     RTDETRDecoder,
-    Segment,
+    Segment, SELayer, conv_bn_hswish, MobileNetV3_InvertedResidual
 )
 from ultralytics.utils import DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGGER, colorstr, emojis, yaml_load
 from ultralytics.utils.checks import check_requirements, check_suffix, check_yaml
@@ -785,6 +784,9 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             DWConvTranspose2d,
             C3x,
             RepC3,
+            SELayer,
+            conv_bn_hswish,
+            MobileNetV3_InvertedResidual
         ):
             c1, c2 = ch[f], args[0]
             if c2 != nc:  # if c2 not equal to number of classes (i.e. for Classify() output)

@@ -4,10 +4,10 @@ from ultralytics import settings
 
 settings.update({"datasets_dir": "./datasets", "weights_dir": "./weight"})
 print(settings)
-model = YOLO("yolov8x.pt")
+model = YOLO('yolov8-MobileNetV3.yaml')
+model.load("./weight/yolov8x.pt")
 results = model.train(
     data="jtdatasets.yaml",
-    model="jtmodel.yaml",
     epochs=3,
     patience=100,
     imgsz=640,

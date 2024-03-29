@@ -161,8 +161,9 @@ def compare_number_in_file_and_filename(inputpath):
 # * key为hash;value为file_path                                                     *
 # * remove_duplicates 函数用于删除重复图片及其txt标注文件(根据sha256值判断是否重复)         *
 # * args: directory1: 第一个目录(datasets1/dog/train/images)                        *
-# *       directory2: 第二个目录(datasets2/dog/train/images)                        *
 # *       base: 要删除的文件所在的目录(datasets2/dog/train/)                          *
+# * example:                                                                      *
+# * remove_duplicates("datasets1/dog/train/images", "datasets2/dog/train/")       *
 # =================================================================================
 
 import hashlib
@@ -190,9 +191,9 @@ def find_duplicates(directory) -> defaultdict:
     return file_dict
 
 
-def remove_duplicates(directory1, directory2, base):
+def remove_duplicates(directory1, base):
     file_dict1 = find_duplicates(directory1)
-    file_dict2 = find_duplicates(directory2)
+    file_dict2 = find_duplicates(os.join(base, "images"))
     duplicate_count = 0
     for file_hash, filepaths in file_dict1.items():
         if file_hash in file_dict2:
@@ -203,7 +204,7 @@ def remove_duplicates(directory1, directory2, base):
             os.remove(img_path)
             os.remove(txt_path)
 
-    print(f"Total number of duplicate files in {directory2}: {duplicate_count}")
+    print(f"Total number of removed duplicate files in {directory2}: {duplicate_count}")
 
 
 if __name__ == "__main__":

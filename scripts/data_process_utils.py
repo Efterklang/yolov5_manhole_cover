@@ -14,7 +14,6 @@ import os
 # * change_number 与 write_change_number函数为 mapping_labels的辅助函数               *
 # =================================================================================
 
-
 def mapping_labels(directory):
     for foldername, subfolders, filenames in os.walk(directory):
         for filename in filenames:
@@ -22,7 +21,6 @@ def mapping_labels(directory):
                 file_path = os.path.join(foldername, filename)
                 print(f"Processing file: {file_path}")
                 write_change_number(file_path)
-
 
 def change_number(line):
     map_dict = {"0": "1", "1": "4", "2": "0", "3": "2", "4": "3"}
@@ -57,7 +55,7 @@ def raname_files(directory_img, directory_lbl):
                 label = f.readline().split(" ")[0]
                 if label == "":
                     print(label_path)
-                new_filename = "awell{:s}_{:05d}".format(label, label_count[label])
+                new_filename = "fwell{:s}_{:05d}".format(label, label_count[label])
 
             file_path_img = os.path.join(
                 directory_img, filename.replace(".txt", ".jpg")

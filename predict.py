@@ -53,7 +53,6 @@ def predictImg(
         iou=0.7,
         conf=conf_arg,
         imgsz=640,
-        augment=True,
         device=device_arg,  # default:None; Options: 'cpu', '0', '0,1,2,3', ...
         max_det=5,
         save=True,

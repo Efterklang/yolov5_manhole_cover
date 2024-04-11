@@ -15,7 +15,7 @@ def parse_xml(xml_file)->str:
     root = tree.getroot()
 
     filename = root.find('filename').text
-    img = Image.open('./datasets/images/train/' + filename)
+    img = Image.open('../datasets/images/' + filename)
     width, height = img.size
 
     info = []
@@ -52,6 +52,6 @@ def genTxt(path,output)->None:
 
 if __name__ == '__main__':
     print('Start parsing xmls...')
-    path = 'datasets/train_xmls'
-    output = 'datasets/labels/train'
+    path = '../datasets/xml'
+    output = '../datasets/labels'
     genTxt(path,output)

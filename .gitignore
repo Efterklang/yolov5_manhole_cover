@@ -2,3 +2,4 @@ detect/*
 *.pt
 test/**
 datasets/**
+*.txt

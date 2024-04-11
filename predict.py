@@ -55,10 +55,12 @@ def predictImg(
         imgsz=640,
         device=device_arg,  # default:None; Options: 'cpu', '0', '0,1,2,3', ...
         max_det=5,
+        augment=True,
+        # visualize=True,
         save=True,
         show_labels=True,
         show_boxes=True,
-        show_conf=True,
+        show_conf=True
     )
 
     value_list = []

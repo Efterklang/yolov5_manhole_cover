@@ -4,38 +4,28 @@ import os
 from json import loads
 
 
-def predict_images(image_path):
+def predict_images(img_dir, model_path):
 
-    model = YOLO("/root/teamshare/weights/zhbest.pt")
-    res = model(image_path)
+    model = YOLO(model_path)
+    results = model(img_dir)
 
     model.predict(
-        image_path,
+        img_dir,
         iou=0.7,
         conf=0.75,
+        augment=True,
         imgsz=640,
         device="0",
         max_det=10,
+        agnostic_nms=True,
     )
-
-    return loads(res[0].tojson())
-
-
-def process_directory(image_dir):
-    # Get all jpg images in the directory
-    image_files = [
-        f for f in os.listdir(image_dir) if f.endswith(".jpg") or f.endswith(".png")
-    ]
-    image_files.sort(key=lambda f: int(f[4:-4]))
 
     i = 1
 
-    with open("output.txt", "w") as outfile:
-        for image_file in image_files:
-            image_path = os.path.join(image_dir, image_file)
-
-            predictions = predict_images(image_path)
-
+    with open(str(model_path).split("/")[-1].replace(".", "") + ".txt", "w") as outfile:
+        for res in results:
+            file_name = res.path.split("/")[-1] 
+            predictions = loads(res.tojson())
             for prediction in predictions:
                 class_id = prediction["class"]
                 confidence = prediction["confidence"]
@@ -44,16 +34,12 @@ def process_directory(image_dir):
                 y_min = int(box["y1"])
                 x_max = int(box["x2"])
                 y_max = int(box["y2"])
-                print(f"processed {i} file")
-                print(
-                    f"{image_file} {class_id} {confidence} {x_min} {y_min} {x_max} {y_max}\n"
-                )
                 outfile.write(
-                    f"{image_file} {class_id} {confidence} {x_min} {y_min} {x_max} {y_max}\n"
-                )
-                outfile.flush()
-    i += 1
+                f"{file_name} {class_id} {confidence} {x_min} {y_min} {x_max} {y_max}\n"
+            )
+            outfile.flush()
+        i += 1
 
 
 if __name__ == "__main__":
-    process_directory("/root/teamshare/yddata/test/images")
+    predict_images("./temp", "./weight/best.pt")

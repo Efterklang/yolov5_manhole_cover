@@ -45,7 +45,7 @@ def predictImg(
 ):
 
     # 加载图片
-    model = YOLO(model_path)
+    model = YOLO(model_path, "./weight/yolov8x.pt")
     res = model(image_path)
 
     model.predict(
@@ -60,12 +60,13 @@ def predictImg(
         save=True,
         show_labels=True,
         show_boxes=True,
-        show_conf=True
+        show_conf=True,
     )
 
     value_list = []
     r = res[0]
     from os.path import basename
+
     list_string = list_to_string(parseJson(r.tojson(), conf_arg))
     file_name = basename(r.path)
     print(file_name + "\n" + list_string)

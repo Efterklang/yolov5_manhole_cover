@@ -5,7 +5,6 @@
 # | 2        | 井盖缺失（lose）      | 井盖丢失，井口暴露                                                     |
 # | 3        | 井盖未盖（uncovered） | 井盖发生倾斜、翘起、偏离井口没有覆盖完全，致使无法与井座严密闭合的情况 |
 # | 4        | 井圈问题（circle）    | 井圈存在破损而井盖完好                                                 |
-
 import os
 
 # =================================================================================
@@ -46,7 +45,7 @@ def write_change_number(filename):
 # =================================================================================
 
 
-def raname_files(directory_img, directory_lbl):
+def rename_files(directory_img, directory_lbl):
     label_count = {"0": 0, "1": 0, "2": 0, "3": 0, "4": 0}
     for foldername, subfolders, filenames in os.walk(directory_lbl):
         for filename in filenames:
@@ -55,7 +54,7 @@ def raname_files(directory_img, directory_lbl):
                 label = f.readline().split(" ")[0]
                 if label == "":
                     print(label_path)
-                new_filename = "fwell{:s}_{:05d}".format(label, label_count[label])
+                new_filename = "z1well{:s}_{:05d}".format(label, label_count[label])
 
             file_path_img = os.path.join(
                 directory_img, filename.replace(".txt", ".jpg")
@@ -207,3 +206,5 @@ def remove_duplicates(directory1, base):
 
 if __name__ == "__main__":
     print("do sth...")
+    mapping_labels("../train/labels")
+    rename_files("../train/images", "../train/labels")

@@ -24,9 +24,13 @@ def predict_images(img_dir, model_path):
 
     with open(str(model_path).split("/")[-1].replace(".", "") + ".txt", "w") as outfile:
         for res in results:
-            file_name = res.path.split("/")[-1] 
+            if os.name == "nt":
+                file_name = res.path.split("\\")[-1]
+            else:
+                file_name = res.path.split("/")[-1]
             predictions = loads(res.tojson())
             for prediction in predictions:
+
                 class_id = prediction["class"]
                 confidence = prediction["confidence"]
                 box = prediction["box"]
@@ -35,8 +39,10 @@ def predict_images(img_dir, model_path):
                 x_max = int(box["x2"])
                 y_max = int(box["y2"])
                 outfile.write(
-                f"{file_name} {class_id} {confidence} {x_min} {y_min} {x_max} {y_max}\n"
-            )
+                    f"{file_name} {class_id} {confidence} {x_min} {y_min} {x_max} {y_max}\n"
+                    if confidence > 0.75
+                    else ""
+                )
             outfile.flush()
         i += 1
 

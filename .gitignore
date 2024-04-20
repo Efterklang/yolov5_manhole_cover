@@ -2,4 +2,9 @@ detect/*
 *.pt
 test/**
 datasets/**
+**/images/*
+**/labels/*
+.*
 *.txt
+*.jpg
+*.png

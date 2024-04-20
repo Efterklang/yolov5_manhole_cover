@@ -6,7 +6,7 @@ settings.update({"datasets_dir": "./datasets", "weights_dir": "./weight"})
 model = YOLO('yolov8-MobileNetV3.yaml')
 model.load("./weight/yolov8x.pt")
 results = model.train(
-    data="valid.yaml",
+    data="datasets.yaml",
     epochs=3,
     patience=100,
     imgsz=640,

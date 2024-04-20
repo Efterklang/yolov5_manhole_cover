@@ -14,11 +14,19 @@ def parseJson(json_str, confidence) -> list:
 
         list: A list of 'class' values extracted from the JSON objects.
     """
-
+    map_class = {
+        0: 1,  # 0  broke
+        1: 2,  # 1  lose
+        2: 3,  # 2  uncovered
+        3: 6,  # 3  crack
+        4: 7,  # 4  potholes
+        5: 8,  # 5  模糊
+    }
     json_data = json.loads(json_str)
     value_list = []
     for obj in json_data:
-        class_value = obj.get("class", None)
+        original_value = obj.get("class", None)
+        class_value = map_class[original_value]
         if class_value is not None and obj.get("confidence", 0) > confidence:
             value_list.append(class_value)
     return value_list
@@ -40,9 +48,8 @@ def list_to_string(input_list) -> str:
     return count + "\n" + value_str
 
 
-def predictImg(
-    image_path, model_path="./weight/best.pt", device_arg="0", conf_arg=0.35
-):
+def predictImg(image_path, model_path="./weight/js.pt", device_arg="0", conf_arg=0.3):
+
     # 加载图片
     model = YOLO(model_path, "./weight/yolov8x.pt")
     res = model(image_path)

@@ -4,7 +4,7 @@ from ultralytics import settings
 
 settings.update({"datasets_dir": "./datasets", "weights_dir": "./weight"})
 model = YOLO('yolov8-MobileNetV3.yaml')
-model.load("./weight/yolov8x.pt")
+model.load("./weights/yolov8x.pt")
 results = model.train(
     data="datasets.yaml",
     epochs=3,

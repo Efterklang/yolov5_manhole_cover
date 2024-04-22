@@ -88,7 +88,12 @@ if __name__ == "__main__":
     # args = parser.parse_args()
     # predictImg(args.path, args.model)
     # Example usage: python predict.py --path ./data/images/1.jpg
-    from sys import argv
+    # from sys import argv
 
-    path = argv[1]
-    predictImg(path)
+    # path = argv[1]
+    # predictImg(path)
+    while True:
+        path = input("输入图片路径：")
+        if path == "exit":
+            break
+        predictImg(path)

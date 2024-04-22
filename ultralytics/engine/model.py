@@ -134,6 +134,12 @@ class Model(nn.Module):
             self._load(model, task=task)
 
         self.model_name = model
+        
+        # NOTE : 新建Model实例时初始化Predictor
+              
+        self.predictor = self._smart_load("predictor")( _callbacks=self.callbacks)
+        self.predictor.setup_model(model=self.model, verbose=False)
+        
 
     def __call__(self, source=None, stream=False, **kwargs):
         """

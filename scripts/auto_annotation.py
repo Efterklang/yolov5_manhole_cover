@@ -7,7 +7,7 @@ import os
 import logging
 
 class AutoAnnotator:
-    def __init__(self, model_path="./weight/best.pt", confidence=0.75, imgsz=640, device="0", max_det=5, iou=0.7):
+    def __init__(self, model_path="./weights/best.pt", confidence=0.75, imgsz=640, device="0", max_det=5, iou=0.7):
         self.model = YOLO(model_path)
         self.confidence = confidence
         self.imgsz = imgsz
@@ -39,9 +39,5 @@ class AutoAnnotator:
 
 
 if __name__ == "__main__":
-    annotator = AutoAnnotator(model_path="./weight/best.pt", confidence=0.75)
-    annotator.annotate_directory("./test/images", "./test/labels")
-
-
-
-
+    annotator = AutoAnnotator(model_path="./weights/best.pt", confidence=0.75)
+    annotator.annotate_directory("./datasets/images", "./datasets/labels")

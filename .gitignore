@@ -5,6 +5,10 @@ datasets/**
 **/images/*
 **/labels/*
 .*
-*.txt
+out/*
 *.jpg
 *.png
+**/__pycache__/
+*.onnx
+*.ini
+

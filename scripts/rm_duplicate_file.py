@@ -2,24 +2,26 @@ import os
 import hashlib
 from collections import defaultdict
 
-# =================================================================================
-# * calculate_hash 函数用于计算文件的哈希值                                            *
-# * find_duplicates 函数用于生成给的目录下的 dict;                                     *
-# * key为hash;value为file_path                                                     *
-# * remove_duplicates 函数用于删除重复图片及其txt标注文件(根据sha256值判断是否重复)         *
-# * args: directory1: 第一个目录(datasets1/dog/train/images)                        *
-# *       base: 要删除的文件所在的目录(datasets2/dog/train/)                          *
-# * example:                                                                      *
-# * remove_duplicates("datasets1/dog/train/images", "datasets2/dog/train/")       *
-# =================================================================================
 
 class FileProcessor:
-    def __init__(self, block_size=65536):
+    """
+    dir1: 第一个目录(datasets1/train/images)
+    dir2: 第二个目录(datasets2/train/images)
+    base_dir: 要删除的文件所在的目录(datasets2/dog/train/),同时删除img和label文件
+    """
+
+    def __init__(self, dir1, dir2, base_dir, block_size=65536):
         self.block_size = block_size
+        self.dir1 = dir1
+        self.dir2 = dir2
+        self.base_dir = base_dir
         self.file_dict1 = None
         self.file_dict2 = None
 
     def calculate_hash(self, file_path):
+        """
+        Calculate the hash of a file
+        """
         hash_algo = hashlib.sha256()
         with open(file_path, "rb") as f:
             while True:
@@ -29,7 +31,10 @@ class FileProcessor:
                 hash_algo.update(data)
         return hash_algo.hexdigest()
 
-    def find_duplicates(self, directory):
+    def gen_hash_dict(self, directory):
+        """
+            Generate a dictionary of file hashes
+        """
         file_dict = defaultdict(list)
         for foldername, subfolders, filenames in os.walk(directory):
             for filename in filenames:
@@ -38,19 +43,20 @@ class FileProcessor:
                 file_dict[file_hash].append(filepath)
         return file_dict
 
-    def remove_duplicates(self, directory1, base):
+    def remove_duplicates(self):
         if not self.file_dict1:
-            self.file_dict1 = self.find_duplicates(directory1)
+            self.file_dict1 = self.find_duplicates(self.dir1)
         if not self.file_dict2:
-            self.file_dict2 = self.find_duplicates(os.path.join(base, "images"))
-        
+            self.file_dict2 = self.find_duplicates(self.dir2)
+
         duplicate_count = 0
+
         for file_hash, filepaths in self.file_dict1.items():
             if file_hash in self.file_dict2:
                 duplicate_count += 1
                 name = "".join(self.file_dict2[file_hash]).split("\\")[1].split(".")[0]
-                txt_path = os.path.join(base, "labels", name + ".txt")
-                img_path = os.path.join(base, "images", name + ".jpg")
+                txt_path = os.path.join(self.base_dir, "labels", name + ".txt")
+                img_path = os.path.join(self.base_dir, "images", name + ".jpg")
                 os.remove(img_path)
                 os.remove(txt_path)
 
@@ -58,5 +64,6 @@ class FileProcessor:
 
 
 if __name__ == "__main__":
-    processor = FileProcessor()
-    processor.remove_duplicates("datasets1/dog/train/images", "datasets2/dog/train/")
+    base = "datasets2/dog/train/"
+    processor = FileProcessor("datasets1/train/images", "datasets2/train/images", base)
+    processor.remove_duplicates()

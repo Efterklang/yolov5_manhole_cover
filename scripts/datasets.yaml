@@ -1,0 +1,16 @@
+path: /root/teamshare/ccccdata/datasets # dataset root dir
+train: train # train images (relative to 'path') 128 images
+val: valid # val images (relative to 'path') 128 images
+test: # test images (optional)
+
+# Classes
+nc: 8
+names:
+  0: good #完好井盖
+  1: broke # 井盖破损
+  2: lose # 井盖丢失
+  3: uncovered # 井盖未盖
+  4: cracks # 地面裂缝
+  5: pothole #地面坑洞
+  6: fadedlane #褪色标线
+  7: accident #车祸

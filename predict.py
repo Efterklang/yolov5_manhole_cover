@@ -20,19 +20,21 @@ class ImagePredictor:
             list: A list of 'class' values extracted from the JSON objects.
         """
         map_class = {
-            0: 1,  # 0  broke
-            1: 2,  # 1  lose
-            2: 3,  # 2  uncovered
-            3: 6,  # 3  crack
-            4: 7,  # 4  potholes
-            5: 8,  # 5  模糊
+            0: -1,  # 0  good
+            1: 1,  # 1  broke
+            2: 2,  # 2  lose
+            3: 3,  # 3  uncovered
+            4: -1,  # 4  cracks
+            5: 4,  # 5  pothole
+            6: 5,  # 6  faded lane line
+            7: 6,  # 7  accident
         }
         json_data = loads(json_str)
         value_list = []
         for obj in json_data:
             original_value = obj.get("class", None)
             class_value = map_class[original_value]
-            if class_value is not None and obj.get("confidence", 0) > self.confidence:
+            if class_value is not None and obj.get("confidence", 0) > self.confidence and class_value != -1:
                 value_list.append(class_value)
         return value_list
 

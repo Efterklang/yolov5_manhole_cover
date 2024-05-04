@@ -14,13 +14,21 @@ channel.queue_declare("rels")
 class ImagePredictor:
     def __init__(self, model_path="./models/js.onnx",conf_thres = 0.2,iou_thres =0.3):
         self.detector = YOLOv8(model_path, conf_thres=conf_thres, iou_thres=iou_thres)
+        self.db_index_map_class = {
+                0: -1,  # 0  good
+                1: 1,  # 1  broke
+                2: 2,  # 2  lose
+                3: 3,  # 3  uncovered
+                4: -1,  # 4  cracks
+                5: 4,  # 5  pothole
+                6: 5,  # 6  faded lane line
+                7: 6,  # 7  accident
+        }
 
     def list_to_string(self, input_list) -> str:
-        count = str(len(input_list))
-        if count == 0:  # 判断列表是否为空
-            value_str = "-1"
-        else:
-            value_str = ",".join(str(i) for i in input_list)
+        value_list = [self.db_index_map_class[value] for value in input_list if self.db_index_map_class[value] != -1]
+        count = str(len(value_list))
+        value_str = ",".join(str(i) for i in value_list) if count != "0" else "-1"
         return count + "\n" + value_str
 
     def predictImg(self,img_path):
@@ -30,13 +38,6 @@ class ImagePredictor:
 
 if __name__ == "__main__":
     predictor = ImagePredictor()
-    # Test 
-    # while True:
-    #     img_path = input()
-    #     try:
-    #         predictor.predictImg(img_path)
-    #     except Exception as e:
-    #         print(f"Error: An error occurred while predicting the image: {e}")
     
     channel.basic_consume(
         auto_ack=True,

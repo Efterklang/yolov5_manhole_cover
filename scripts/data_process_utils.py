@@ -2,6 +2,7 @@ import logging
 import os
 import shutil
 from collections import defaultdict
+import random
 
 
 class DatasetRetriever:
@@ -178,40 +179,42 @@ class DatasetProcessor:
         print("Total number of val files: ", i)
         print("Total number of test files: ", j)
 
-    def remove_data_with_labels(self, label_num):
+    def process_data_with_labels(self, label_num, mode="remove"):
         i = 0
-        for file in os.listdir(self.lbl_dir):
-            if file.endswith(".txt"):
-                file_name = os.path.splitext(os.path.basename(file))[0]
-                self.check_labels(file_name, label_num)
-                i += 1
-        print("Total number of removed data: ", i)
+        if mode == "remove":
+            for file in os.listdir(self.lbl_dir):
+                if file.endswith(".txt"):
+                    file_name = os.path.splitext(os.path.basename(file))[0]
+                    self.remove_labels(file_name, label_num)
+                    i += 1
+            print("Total number of removed data: ", i)
+        elif mode == "move":
+            for file in os.listdir(self.lbl_dir):
+                if file.endswith(".txt"):
+                    file_name = os.path.splitext(os.path.basename(file))[0]
+                    self.move_labels(file_name, label_num, "datasets/Japan/val/")
+                    i += 1
+            print("Total number of removed data: ", i)
 
-    def check_labels(self, file_name, label_num):
+    def move_labels(self, file_name, label_num, dest_dir):
         file_lbl_path = os.path.join(self.lbl_dir, file_name + ".txt")
         file_img_path = os.path.join(self.img_dir, file_name + ".jpg")
+        dest_lbl_path = os.path.join(dest_dir + "/labels", file_name + ".txt")
+        dest_img_path = os.path.join(dest_dir + "/images", file_name + ".jpg")
+        # random move
+        random_num = random.randint(0, 3)
+        if random_num == 0:
+            with open(file_lbl_path, "r") as f:
+                for line in f:
+                    words = line.split()
+                    if words[0].isdigit and words[0] == label_num:
+                        try:
+                            shutil.move(file_lbl_path, dest_lbl_path)
+                            shutil.move(file_img_path, dest_img_path)
+                        except FileNotFoundError as e:
+                            print(f"Error in removing files: {e}")
 
-        with open(file_lbl_path, "r") as f:
-            for line in f:
-                words = line.split()
-                if words[0].isdigit and words[0] == label_num:
-                    try:
-                        print(file_img_path)
-                        # os.remove(file_lbl_path)
-                        # os.remove(file_img_path)
-                    except FileNotFoundError as e:
-                        print(f"Error in removing files: {e}")
-
-    def remove_data_with_labels(self, label_num):
-        i = 0
-        for file in os.listdir(self.lbl_dir):
-            if file.endswith(".txt"):
-                file_name = os.path.splitext(os.path.basename(file))[0]
-                self.check_labels(file_name, label_num)
-                i += 1
-        print("Total number of removed data: ", i)
-
-    def check_labels(self, file_name, label_num):
+    def remove_labels(self, file_name, label_num):
         file_lbl_path = os.path.join(self.lbl_dir, file_name + ".txt")
         file_img_path = os.path.join(self.img_dir, file_name + ".jpg")
 
@@ -225,12 +228,10 @@ class DatasetProcessor:
                     except FileNotFoundError as e:
                         print(f"Error in removing files: {e}")
 
-
 if __name__ == "__main__":
     img_dir = "datasets/Japan/train/images"
     lbl_dir = "datasets/Japan/train/labels"
     processor = DatasetProcessor(img_dir, lbl_dir)
-    processor.remove_data_with_labels("7")
     # DatasetRetriever(img_dir,lbl_2dir).find_missing_txt_files()
     # processor.mapping_labels()
     # processor.rename_files("pothole0")

@@ -1,9 +1,0 @@
-FROM archlinux
-
-RUN pacman -Syu --noconfirm && \
-    pacman -S --noconfirm python python-pip mesa $(awk -F= '{print "python-"$1}' requirements.txt)
-
-COPY . /predict
-
-WORKDIR /predict
-

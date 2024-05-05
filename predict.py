@@ -9,7 +9,7 @@ socket = context.socket(zmq.REP)
 socket.bind("tcp://*:20050")
 
 class ImagePredictor:
-    def __init__(self, model_path="./models/js.onnx",conf_thres = 0.2,iou_thres =0.3):
+    def __init__(self, model_path="./weights/js.onnx",conf_thres = 0.2,iou_thres =0.3):
         self.detector = YOLOv8(model_path, conf_thres=conf_thres, iou_thres=iou_thres)
         self.db_index_map_class = {
                 0: -1,  # 0  good

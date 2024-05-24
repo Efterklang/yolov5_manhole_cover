@@ -10,7 +10,7 @@ class DatasetRetriever:
         self.img_dir = img_dir
         self.lbl_dir = lbl_dir
 
-    def find_missing_txt_files(self):
+    def find_missing_txt_files(self, remove=False):
         i = 0
         for img_file in os.listdir(self.img_dir):
             if img_file.endswith(".jpg"):
@@ -18,7 +18,8 @@ class DatasetRetriever:
                 txt_file = os.path.join(self.lbl_dir, base_name + ".txt")
                 if not os.path.isfile(txt_file):
                     # 如果不存在，打印.jpg文件名
-                    os.remove(os.path.join(self.img_dir, img_file))
+                    if remove:
+                        os.remove(os.path.join(self.img_dir, img_file))
                     print(base_name)
                     i += 1
         print("Total number of missing files: ", i)
@@ -37,15 +38,7 @@ class DatasetRetriever:
 
 
 class DatasetProcessor:
-
-    logger = logging.getLogger(__name__)
-
-    def __init__(
-        self,
-        img_dir,
-        lbl_dir,
-        map_dict={"0": "5", "5": "5"},
-    ):
+    def __init__(self, img_dir, lbl_dir, map_dict):
         self.map_dict = map_dict
         self.img_dir = img_dir
         self.lbl_dir = lbl_dir
@@ -122,10 +115,10 @@ class DatasetProcessor:
                     shutil.move(
                         img_file_path,
                         os.path.join(self.img_dir, new_filename + ".jpg"),
-                    )
+                    )  # rename img file
                     shutil.move(
                         label_path, os.path.join(self.lbl_dir, new_filename + ".txt")
-                    )
+                    )  # rename label file
                     if label == "":
                         label_count["background"] += 1
                     else:
@@ -140,10 +133,11 @@ class DatasetProcessor:
         """
         This function is used to classify the dataset into train, val, and test sets.
         """
+        logger = logging.getLogger(__name__)
         logger.info("Classifying the dataset(image) into train, val, and test sets.")
-        classify_with_arguments(self.img_dir)
+        self.classify_with_arguments(self.img_dir)
         logger.info("Classifying the dataset(label) into train, val, and test sets.")
-        classify_with_arguments(self.lbl_dir)
+        self.classify_with_arguments(self.lbl_dir)
 
     def classify_with_arguments(self, input):
         """
@@ -175,6 +169,7 @@ class DatasetProcessor:
                         os.path.join(root, file), os.path.join(input + "/train", file)
                     )
                     k += 1
+        print(f"{input} is classified")
         print("Total number of train files: ", k)
         print("Total number of val files: ", i)
         print("Total number of test files: ", j)
@@ -228,10 +223,6 @@ class DatasetProcessor:
                     except FileNotFoundError as e:
                         print(f"Error in removing files: {e}")
 
+
 if __name__ == "__main__":
-    img_dir = "datasets/Japan/train/images"
-    lbl_dir = "datasets/Japan/train/labels"
-    processor = DatasetProcessor(img_dir, lbl_dir)
-    # DatasetRetriever(img_dir,lbl_2dir).find_missing_txt_files()
-    # processor.mapping_labels()
-    # processor.rename_files("pothole0")
+    print("Starting...")

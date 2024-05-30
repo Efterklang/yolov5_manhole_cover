@@ -12,3 +12,6 @@ out/*
 *.ini
 dirty/**
 **/*.onnx
+venv/**
+weights/**
+temp.py

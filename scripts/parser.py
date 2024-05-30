@@ -63,9 +63,14 @@ class CSVparser:
     """
     * Parse csv files to yolo format
     * from
-    * xmin,ymin,xmax,ymax,Frame,class,Preview URL
+    * xmin,ymin,xmax,ymax,Frame,class
     * to
     * class_id x_center y_center width height
+    * init_args
+    * csv_path: path to csv file
+    * img_path: path to image files,such as datasets/train/images/
+    * output_path: path to output txt files
+    * map_dict: map class name to class id
     """
 
     def __init__(self, csv_path,img_path, output_path,map_dict = {
@@ -80,11 +85,11 @@ class CSVparser:
 
     def parse_csv(self):
         with open(self.csv_path, "r") as csv_file:
-            print("Parsing csv file... {csv_path}")
+            print(f"Parsing csv file... {csv_path}")
             reader = csv.reader(csv_file)
             next(reader)  # skip the header
             for row in reader:
-                xmin, ymin, xmax, ymax, file_name, label, _ = row
+                xmin, ymin, xmax, ymax, file_name, label = row
                 # get image width and height
                 img = Image.open(f"{self.img_path}/{file_name}")
                 base_name = file_name.split(".")[0]

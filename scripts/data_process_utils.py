@@ -38,6 +38,7 @@ class DatasetRetriever:
 
 class DatasetProcessor:
 
+<<<<<<< HEAD
     logger = logging.getLogger(__name__)
 
     def __init__(
@@ -47,8 +48,18 @@ class DatasetProcessor:
         map_dict={"0": "5", "5": "5"},
     ):
         self.map_dict = map_dict
+=======
+    def __init__(self, img_dir, lbl_dir, map_dict):
+        """
+        init_args:
+        img_dir: str, path to the image directory
+        lbl_dir: str, path to the label directory
+        map_dict: dict, mapping from old number to new number
+        """
+>>>>>>> 33ca006 (update data processer utils;)
         self.img_dir = img_dir
         self.lbl_dir = lbl_dir
+        self.map_dict = map_dict
 
     def mapping_labels(self):
         """
@@ -136,6 +147,7 @@ class DatasetProcessor:
         for k, v in label_count.items():
             print(f"Total number of {k} files: {v}")
 
+<<<<<<< HEAD
     def classify(self):
         """
         This function is used to classify the dataset into train, val, and test sets.
@@ -179,6 +191,8 @@ class DatasetProcessor:
         print("Total number of val files: ", i)
         print("Total number of test files: ", j)
 
+=======
+>>>>>>> 33ca006 (update data processer utils;)
     def process_data_with_labels(self, label_num, mode="remove"):
         i = 0
         if mode == "remove":
@@ -228,6 +242,78 @@ class DatasetProcessor:
                     except FileNotFoundError as e:
                         print(f"Error in removing files: {e}")
 
+<<<<<<< HEAD
+=======
+
+class DatasetClassifier:
+    def __init__(self, lbl_path, img_path, output_path):
+        self.lbl_path = lbl_path
+        self.img_path = img_path
+        self.output_path = output_path
+
+    def create_directories(self, file_type, have_test):
+        """
+        创建目录的辅助函数，减少重复代码
+        """
+        # 创建目录结构
+        if file_type == "images":
+            directory_structure = [
+                "train/images",
+                "val/images",
+            ]
+            if have_test:
+                directory_structure.append("test/images")
+        elif file_type == "labels":
+            directory_structure = [
+                "train/labels",
+                "val/labels",
+            ]
+            if have_test:
+                directory_structure.append("test/labels")
+        else:
+            raise ValueError("Invalid file type")
+        for dirpath in directory_structure:
+            dir_path = os.path.join(self.output_path, dirpath)  # 使用字符串进行join操作
+            os.makedirs(dir_path, exist_ok=True)
+
+    def _classify(self, input_path, file_type, have_test=False):
+        """
+        classify() helper function
+        """
+        self.create_directories(file_type=file_type, have_test=have_test)
+
+        i, j, k = 0, 0, 0
+        for root, dirs, files in os.walk(input_path):
+            for file in files:
+                tag = os.path.splitext(file)[0]
+                # 从字符串tag中找到第一个数字字符，赋给变量num。如果tag中没有数字字符，num赋值为None。
+                num = next((char for char in reversed(tag) if char.isdigit()), None)
+                
+                if num == "3":
+                    destination = "val"
+                    i += 1
+                elif num == "9" and have_test:
+                    destination = "test"
+                    j += 1
+                else:
+                    destination = "train"
+                    k += 1
+                
+                src_file = os.path.join(root, file)
+                dest_file = os.path.join(self.output_path, destination, file_type, file)
+                shutil.move(src_file, dest_file)
+
+        print(f"{input_path} is classified")
+        print("Total number of train files: ", k)
+        print("Total number of val files: ", i)
+        print("Total number of test files: ", j)
+
+    def classify(self):
+        self._classify(self.lbl_path, file_type="labels")
+        self._classify(self.img_path, file_type="images")
+
+
+>>>>>>> 33ca006 (update data processer utils;)
 if __name__ == "__main__":
     img_dir = "datasets/Japan/train/images"
     lbl_dir = "datasets/Japan/train/labels"

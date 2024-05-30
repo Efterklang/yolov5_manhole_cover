@@ -11,4 +11,12 @@ out/*
 **/__pycache__/
 *.onnx
 *.ini
+<<<<<<< HEAD
 
+=======
+dirty/**
+**/*.onnx
+venv/**
+weights/**
+temp.py
+>>>>>>> 33ca006 (update data processer utils;)

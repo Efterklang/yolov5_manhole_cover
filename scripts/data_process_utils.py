@@ -38,17 +38,6 @@ class DatasetRetriever:
 
 class DatasetProcessor:
 
-<<<<<<< HEAD
-    logger = logging.getLogger(__name__)
-
-    def __init__(
-        self,
-        img_dir,
-        lbl_dir,
-        map_dict={"0": "5", "5": "5"},
-    ):
-        self.map_dict = map_dict
-=======
     def __init__(self, img_dir, lbl_dir, map_dict):
         """
         init_args:
@@ -56,7 +45,6 @@ class DatasetProcessor:
         lbl_dir: str, path to the label directory
         map_dict: dict, mapping from old number to new number
         """
->>>>>>> 33ca006 (update data processer utils;)
         self.img_dir = img_dir
         self.lbl_dir = lbl_dir
         self.map_dict = map_dict
@@ -147,52 +135,6 @@ class DatasetProcessor:
         for k, v in label_count.items():
             print(f"Total number of {k} files: {v}")
 
-<<<<<<< HEAD
-    def classify(self):
-        """
-        This function is used to classify the dataset into train, val, and test sets.
-        """
-        logger.info("Classifying the dataset(image) into train, val, and test sets.")
-        classify_with_arguments(self.img_dir)
-        logger.info("Classifying the dataset(label) into train, val, and test sets.")
-        classify_with_arguments(self.lbl_dir)
-
-    def classify_with_arguments(self, input):
-        """
-        classify() helper function
-        """
-        os.makedirs(input + "/train", exist_ok=True)
-        os.makedirs(input + "/val", exist_ok=True)
-        os.makedirs(input + "/test", exist_ok=True)
-        i, j, k = 0, 0, 0
-        for root, dirs, files in os.walk(input):
-            for file in files:
-                tag = file.split(".")[0][::-1]
-                for char in tag:
-                    if char.isdigit():
-                        last_number = char
-                        break
-                if last_number == "3":
-                    shutil.move(
-                        os.path.join(root, file), os.path.join(input + "/val", file)
-                    )
-                    i += 1
-                elif last_number == "9":
-                    shutil.move(
-                        os.path.join(root, file), os.path.join(input + "/test", file)
-                    )
-                    j += 1
-                else:
-                    shutil.move(
-                        os.path.join(root, file), os.path.join(input + "/train", file)
-                    )
-                    k += 1
-        print("Total number of train files: ", k)
-        print("Total number of val files: ", i)
-        print("Total number of test files: ", j)
-
-=======
->>>>>>> 33ca006 (update data processer utils;)
     def process_data_with_labels(self, label_num, mode="remove"):
         i = 0
         if mode == "remove":
@@ -242,8 +184,6 @@ class DatasetProcessor:
                     except FileNotFoundError as e:
                         print(f"Error in removing files: {e}")
 
-<<<<<<< HEAD
-=======
 
 class DatasetClassifier:
     def __init__(self, lbl_path, img_path, output_path):
@@ -313,7 +253,6 @@ class DatasetClassifier:
         self._classify(self.img_path, file_type="images")
 
 
->>>>>>> 33ca006 (update data processer utils;)
 if __name__ == "__main__":
     img_dir = "datasets/Japan/train/images"
     lbl_dir = "datasets/Japan/train/labels"

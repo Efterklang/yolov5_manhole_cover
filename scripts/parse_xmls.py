@@ -4,7 +4,7 @@ import logging
 from PIL import Image
 
 label = {
-    # TODO 'class_name': class_id
+    # 'class_name': class_id
     "class_1": 0,
     "class_2": 1,
     "class_3": 2,
